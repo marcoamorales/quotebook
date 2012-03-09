@@ -8,8 +8,13 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from quotebook.forms import *
 
+def quotes(request):
+    r_quotes = Quote.objects.random_quotes()
+    context = {'r_quotes': r_quotes}
+    return render_to_response('quotebook.html', RequestContext(request, context))
+
 @login_required
-def quotebooks(request, user):
+def user_quotebooks(request, user):
     current_user = User.objects.get(username=user)
     quotebooks = Book.objects.filter(owner=current_user)
     context = {'quotebooks': quotebooks, 'theuser': user}
